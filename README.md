@@ -48,9 +48,9 @@ reports/    generated verdict reports
 ## Status
 
 - [x] Phase 0 — scaffold, .env handling, pull scripts
-- [ ] Phase 0 — full-history data pull **(blocked in cloud: egress policy denies
-  `graph.facebook.com`; run `.github/workflows/daily-pull.yml` via Actions after
-  adding secrets, or re-pull locally and commit `data/meta/`)**
+- [x] Phase 0 — full-history data pull (runs on GitHub Actions; first pull committed
+  2026-07-02, verified against the local baseline — spend +$0.41 post-close
+  restatement, all other checks exact)
 - [x] Phase 0 — daily-pull workflow, baseline verifier, backfill snapshotter
 - [ ] Phase 1 — baseline + decomposition
 - [ ] Phase 2 — signal library seed
