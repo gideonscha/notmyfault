@@ -1,32 +1,55 @@
 {
-  "_comment": "Labeled ground truth (brief §8). The engine is run BLIND across full history; these labels are only compared against its output afterwards.",
-  "incidents": [
+  "_comment": "Labeled ground truth (brief §8). The engine is run BLIND across full history; these labels are only compared against its output afterwards. Split 2026-07-02: account data begins 2025-11-20, so pre-history incidents cannot be backtested against pulled data and live in untestable_pre_history.",
+  "testable": [
     {
-      "id": "eshkol-link-break",
-      "name": "eshkol link break (fbclid loss)",
-      "window_start": null,
-      "window_end": "2025-05-15",
-      "window_note": "pre-May 15, 2025 fix; exact onset to be recovered by the engine",
-      "ground_truth": "INTERNAL_FUNNEL",
-      "notes": "attribution/tracking break — fbclid lost on landing"
+      "id": "mar13-post-pause-learning-reset",
+      "name": "Mar 13-17, 2026 post-pause learning reset (CPA +175%)",
+      "window_start": "2026-03-13",
+      "window_end": "2026-03-17",
+      "window_note": "first five delivering days after the 14-day delivery pause (acct-delivery-pause-2026-02-27)",
+      "ground_truth": "INTERNAL_ADS",
+      "notes": "Delivery resumption after the Feb 27 - Mar 12 pause reset ad-set learning; CVR-dominated CPA spike (Phase 1 blind detection: CPA +174.7%, CVR share of drift 72%, CTR 16%, CPM 11%). Advertiser-side cause: the pause/resume itself."
     },
     {
-      "id": "spend-doubling-auction-inflation",
-      "name": "Spend-doubling auction inflation (CPA $171 era)",
-      "window_start": "2025-03-01",
-      "window_end": "2025-05-31",
-      "window_note": "spring 2025, approximate; exact window to be recovered by the engine",
-      "ground_truth": "INTERNAL_ADS",
-      "notes": "auction response to advertiser's own spend increase; Herrmann hypothesis ruled out"
+      "id": "may24-checkout-event-shift",
+      "name": "May 24, 2026 checkout-event definition shift (rate x~6.5 overnight)",
+      "window_start": "2026-05-24",
+      "window_end": null,
+      "window_note": "persistent level shift, not a bounded incident; still active at data end",
+      "ground_truth": "INTERNAL_FUNNEL",
+      "notes": "checkouts_initiated/inline_link_clicks steps 0.081 -> 0.400 in one day and persists (acct-checkout-event-shift-2026-05-24). Site/tracking-layer definition change. Purchases unaffected — a REPORTING-flavored funnel-instrumentation change the engine must distinguish from a real funnel break."
     },
     {
       "id": "jun25-checkout-entry-drop",
       "name": "Jun 25, 2026 checkout-entry drop (~21%)",
       "window_start": "2026-06-25",
       "window_end": null,
-      "window_note": "ongoing as of kickoff",
+      "window_note": "ongoing as of kickoff; measured against POST-May-24-shift checkout levels",
       "ground_truth": "UNRESOLVED",
-      "notes": "publish suspected, causation unproven — the live case the engine must adjudicate; headline deliverable of Phase 4"
+      "notes": "publish suspected, causation unproven — the live case the engine must adjudicate; headline deliverable of Phase 4. Phase 1 blind detection flagged CPA +59.1% on 2026-06-26..28 (CVR 53% / CTR 26% / CPM 21% of drift)."
     }
-  ]
+  ],
+  "untestable_pre_history": {
+    "_note": "Account data begins 2025-11-20 (first delivery). These incidents predate pulled history and cannot be adjudicated against data; retained as institutional memory only.",
+    "incidents": [
+      {
+        "id": "eshkol-link-break",
+        "name": "eshkol link break (fbclid loss)",
+        "window_start": null,
+        "window_end": "2025-05-15",
+        "window_note": "pre-May 15, 2025 fix; predates account history",
+        "ground_truth": "INTERNAL_FUNNEL",
+        "notes": "attribution/tracking break — fbclid lost on landing"
+      },
+      {
+        "id": "spend-doubling-auction-inflation",
+        "name": "Spend-doubling auction inflation (CPA $171 era)",
+        "window_start": "2025-03-01",
+        "window_end": "2025-05-31",
+        "window_note": "spring 2025, approximate; predates account history",
+        "ground_truth": "INTERNAL_ADS",
+        "notes": "auction response to advertiser's own spend increase; Herrmann hypothesis ruled out"
+      }
+    ]
+  }
 }

@@ -56,6 +56,10 @@ reports/    generated verdict reports
   log-space CPA = CPM/(1000·CTR·CVR) decomposition, anomaly windows ≥2 days beyond
   ±2σ → `reports/anomaly_timeline.md`; delivery pause + checkout-event shift
   registered as ACCOUNT events in `signals/library.json`)
-- [ ] Phase 2 — signal library seed
+- [x] Phase 2 — signal library build-out (7 verified CPI releases incl. shutdown
+  reschedules, DST, 8 recurring rules with account-specific coefficients via
+  `engine/rules.py`; coverage join in `reports/signal_coverage.md`; backtest split
+  into testable/untestable). **Pending: library_seed.json merge — attachment never
+  reached the cloud container; re-attach and re-run `python -m engine.rules && python -m engine.coverage`**
 - [ ] Phase 3 — correlator + verdict engine
 - [ ] Phase 4 — blind backtest (headline: Jun 25, 2026 verdict)

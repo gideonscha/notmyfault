@@ -10,8 +10,9 @@
     "mechanism": "how it plausibly moves which metric",
     "source_url": "required before verified may be true",
     "machine_check": "how to re-verify programmatically",
-    "verified": "bool — unverified records are excluded from verdicts"
+    "verified": "bool \u2014 unverified records are excluded from verdicts"
   },
+  "_pending": "library_seed.json merge pending \u2014 the attachment did not reach the cloud container (2026-07-02). Re-attach to merge; records below were sourced and verified independently.",
   "signals": [
     {
       "id": "acct-delivery-pause-2026-02-27",
@@ -38,9 +39,436 @@
       "source_url": "https://github.com/gideonscha/notmyfault/blob/4845941/data/meta/account_daily.csv",
       "machine_check": "python -c \"import pandas as pd; df=pd.read_csv('data/meta/account_daily.csv',parse_dates=['date_start']); r=df.set_index(df.date_start.dt.date); r['rate']=r.checkouts_initiated/r.inline_link_clicks; import datetime as dt; print(r.loc[dt.date(2026,5,23),'rate'], r.loc[dt.date(2026,5,24),'rate'])\" -> ~0.08 vs ~0.40",
       "verified": true
+    },
+    {
+      "id": "ext-cpi-2025-12-18",
+      "name": "CPI release: November 2025 CPI (shutdown-delayed from Dec 10; October 2025 CPI never published)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2025-12-18",
+      "date_end": "2025-12-18",
+      "severity_prior": 2,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Elevated salience this cycle: first CPI after the 43-day government shutdown; no October reference data was ever collected. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_12182025.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_12182025); see also https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-01-13",
+      "name": "CPI release: December 2025 CPI",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-01-13",
+      "date_end": "2026-01-13",
+      "severity_prior": 1,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_01132026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_01132026)",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-02-13",
+      "name": "CPI release: January 2026 CPI (delayed two days from Feb 11 by the 2026 appropriations lapse)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-02-13",
+      "date_end": "2026-02-13",
+      "severity_prior": 1,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_02132026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_02132026); scheduled date was Feb 11 (see https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm)",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-03-11",
+      "name": "CPI release: February 2026 CPI",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-03-11",
+      "date_end": "2026-03-11",
+      "severity_prior": 1,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_03112026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_03112026)",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-04-10",
+      "name": "CPI release: March 2026 CPI",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-04-10",
+      "date_end": "2026-04-10",
+      "severity_prior": 1,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_04102026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_04102026)",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-05-12",
+      "name": "CPI release: April 2026 CPI",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-05-12",
+      "date_end": "2026-05-12",
+      "severity_prior": 1,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_05122026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_05122026)",
+      "verified": true
+    },
+    {
+      "id": "ext-cpi-2026-06-10",
+      "name": "CPI release: May 2026 CPI (CPI-U +4.2% y/y \u2014 inflation re-acceleration headline)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-06-10",
+      "date_end": "2026-06-10",
+      "severity_prior": 2,
+      "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Headline y/y ran 2.4% (Feb) -> 3.3% (Mar) -> 3.8% (Apr) -> 4.2% (May reference), raising salience through spring 2026. Correlation only unless the cpi_release class coefficient is applied.",
+      "source_url": "https://www.bls.gov/news.release/archives/cpi_06102026.htm",
+      "machine_check": "BLS archive URL encodes release date (cpi_06102026)",
+      "verified": true
+    },
+    {
+      "id": "ext-dst-2026-03-08",
+      "name": "US daylight saving time begins (spring forward), Mar 8 2026",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-03-08",
+      "date_end": "2026-03-08",
+      "severity_prior": 1,
+      "mechanism": "Clocks advance 02:00 local; population-level sleep disruption and a one-hour shift of daily-routine attention windows vs ad-delivery pacing for several days. Statutory date (Energy Policy Act of 2005): second Sunday in March. NOTE: falls inside the account delivery pause (2026-02-27..03-12), so it is unobservable in this account's history. Correlation only, coefficient unknown.",
+      "source_url": "https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst",
+      "machine_check": "second Sunday of March 2026 == 2026-03-08 (deterministic)",
+      "verified": true
     }
   ],
   "rules": {
-    "_comment": "Recurring signals stored as rules, expanded at query time (Phase 2): paydays 1st/15th, SNAP disbursement windows, month-end, DST transitions, tax-refund season, federal holidays."
+    "_comment": "Recurring signals, expanded to per-date flags at query time by engine/rules.py. Account-specific response coefficients (median day-of-week-adjusted log residual on flagged days, engine/baseline.py baselines) are computed by `python -m engine.rules` when a rule has >= 4 occurrences inside the data window; otherwise coefficient stays null and the rule is prior-only (anti-horoscope rule).",
+    "payday_1st": {
+      "name": "Payday: 1st of month",
+      "kind": "day_of_month",
+      "day": 1,
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Salary/benefits liquidity spike around the 1st; plausible CVR/demand lift.",
+      "source_url": "https://www.fns.usda.gov/snap/issuance-schedule",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 8,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": -0.1064,
+            "pct_effect": -0.1009,
+            "mad": 0.1694,
+            "n_days": 6
+          },
+          "cpm": {
+            "dlog_median": -0.0339,
+            "pct_effect": -0.0333,
+            "mad": 0.3594,
+            "n_days": 6
+          },
+          "ctr": {
+            "dlog_median": -0.1946,
+            "pct_effect": -0.1768,
+            "mad": 0.2691,
+            "n_days": 6
+          },
+          "cvr": {
+            "dlog_median": 0.1229,
+            "pct_effect": 0.1308,
+            "mad": 0.2383,
+            "n_days": 6
+          },
+          "spend": {
+            "dlog_median": -0.0797,
+            "pct_effect": -0.0766,
+            "mad": 0.4775,
+            "n_days": 6
+          }
+        },
+        "status": "computed"
+      }
+    },
+    "payday_15th": {
+      "name": "Payday: 15th of month",
+      "kind": "day_of_month",
+      "day": 15,
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Semi-monthly payroll liquidity spike; plausible CVR/demand lift.",
+      "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/pay-administration/",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 7,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": 0.0514,
+            "pct_effect": 0.0527,
+            "mad": 0.1966,
+            "n_days": 6
+          },
+          "cpm": {
+            "dlog_median": 0.0097,
+            "pct_effect": 0.0098,
+            "mad": 0.1581,
+            "n_days": 6
+          },
+          "ctr": {
+            "dlog_median": -0.1376,
+            "pct_effect": -0.1286,
+            "mad": 0.1034,
+            "n_days": 6
+          },
+          "cvr": {
+            "dlog_median": -0.1173,
+            "pct_effect": -0.1107,
+            "mad": 0.2964,
+            "n_days": 6
+          },
+          "spend": {
+            "dlog_median": -0.2641,
+            "pct_effect": -0.2321,
+            "mad": 0.3471,
+            "n_days": 6
+          }
+        },
+        "status": "computed"
+      }
+    },
+    "month_end": {
+      "name": "Month end (last calendar day)",
+      "kind": "last_day_of_month",
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Pre-payday liquidity trough + advertiser-side monthly budget exhaustion/reset effects on auction (also plausibly EXTERNAL_AUCTION via competitor budget cycling).",
+      "source_url": "https://www.fns.usda.gov/snap/issuance-schedule",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 8,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": 0.2622,
+            "pct_effect": 0.2998,
+            "mad": 0.4139,
+            "n_days": 6
+          },
+          "cpm": {
+            "dlog_median": 0.0307,
+            "pct_effect": 0.0312,
+            "mad": 0.1385,
+            "n_days": 6
+          },
+          "ctr": {
+            "dlog_median": -0.1478,
+            "pct_effect": -0.1374,
+            "mad": 0.3437,
+            "n_days": 6
+          },
+          "cvr": {
+            "dlog_median": -0.3508,
+            "pct_effect": -0.2959,
+            "mad": 0.5876,
+            "n_days": 6
+          },
+          "spend": {
+            "dlog_median": 0.2037,
+            "pct_effect": 0.2259,
+            "mad": 0.5496,
+            "n_days": 6
+          }
+        },
+        "status": "computed"
+      }
+    },
+    "snap_window": {
+      "name": "SNAP issuance window (days 1-10, US aggregate approximation)",
+      "kind": "day_of_month_range",
+      "day_start": 1,
+      "day_end": 10,
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "SNAP benefits issue on state-staggered schedules concentrated early in the month; aggregate US liquidity gradient across the month. APPROXIMATION: several states stagger through day 20+; state-level precision requires audience-geo data we do not have.",
+      "source_url": "https://www.fns.usda.gov/snap/issuance-schedule",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 8,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": 0.0635,
+            "pct_effect": 0.0656,
+            "mad": 0.4058,
+            "n_days": 51
+          },
+          "cpm": {
+            "dlog_median": -0.0218,
+            "pct_effect": -0.0216,
+            "mad": 0.1443,
+            "n_days": 51
+          },
+          "ctr": {
+            "dlog_median": -0.2258,
+            "pct_effect": -0.2021,
+            "mad": 0.3131,
+            "n_days": 51
+          },
+          "cvr": {
+            "dlog_median": -0.1134,
+            "pct_effect": -0.1072,
+            "mad": 0.4077,
+            "n_days": 51
+          },
+          "spend": {
+            "dlog_median": 0.1395,
+            "pct_effect": 0.1496,
+            "mad": 0.5044,
+            "n_days": 51
+          }
+        },
+        "status": "computed"
+      }
+    },
+    "federal_holiday": {
+      "name": "US federal holiday (class)",
+      "kind": "date_list",
+      "dates": [
+        "2025-11-27",
+        "2025-12-25",
+        "2026-01-01",
+        "2026-01-19",
+        "2026-02-16",
+        "2026-05-25",
+        "2026-06-19"
+      ],
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Routine/attention displacement; retail demand may rise or fall by holiday type. CLASS COEFFICIENT ONLY: pooling Thanksgiving with MLK Day is heterogeneous \u2014 treat the pooled coefficient as a weak prior, individual holidays have n=1 each.",
+      "source_url": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+      "machine_check": "statutory dates: 4th Thu Nov 2025=11-27, Dec 25, Jan 1, 3rd Mon Jan 2026=01-19, 3rd Mon Feb=02-16, last Mon May=05-25, Jun 19",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 7,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": -0.0975,
+            "pct_effect": -0.0929,
+            "mad": 0.1583,
+            "n_days": 6
+          },
+          "cpm": {
+            "dlog_median": -0.2334,
+            "pct_effect": -0.2082,
+            "mad": 0.5591,
+            "n_days": 6
+          },
+          "ctr": {
+            "dlog_median": -0.0129,
+            "pct_effect": -0.0128,
+            "mad": 0.2234,
+            "n_days": 6
+          },
+          "cvr": {
+            "dlog_median": -0.0486,
+            "pct_effect": -0.0474,
+            "mad": 0.2655,
+            "n_days": 6
+          },
+          "spend": {
+            "dlog_median": -0.517,
+            "pct_effect": -0.4037,
+            "mad": 0.2477,
+            "n_days": 6
+          }
+        },
+        "status": "computed"
+      }
+    },
+    "dst_transition": {
+      "name": "DST transition day (class)",
+      "kind": "dst_transitions",
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "See ext-dst-2026-03-08. Only occurrence in-window falls inside the delivery pause -> unobservable; coefficient permanently null until more history accrues.",
+      "source_url": "https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 1,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": null,
+        "status": "prior only \u2014 1 occurrence(s) < 4, coefficient unknown"
+      }
+    },
+    "tax_refund_season": {
+      "name": "US tax refund season (approximate window Feb 1 - Apr 15)",
+      "kind": "date_range",
+      "date_start": "2026-02-01",
+      "date_end": "2026-04-15",
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Refund-driven discretionary liquidity, strongest mid-Feb through March. APPROXIMATE window; single occurrence in history -> prior only, coefficient stays null.",
+      "source_url": "https://www.irs.gov/refunds",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 1,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": null,
+        "status": "prior only \u2014 1 occurrence(s) < 4, coefficient unknown"
+      }
+    },
+    "cpi_release": {
+      "name": "CPI release day (class)",
+      "kind": "from_signals",
+      "signal_prefix": "ext-cpi-",
+      "layer": "EXTERNAL_DEMAND",
+      "mechanism": "Class-level coefficient over the dated ext-cpi-* records (n=7 in window).",
+      "source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
+      "verified": true,
+      "coefficients": {
+        "n_occurrences_in_window": 7,
+        "method": "median day-of-week-adjusted log residual on flagged days",
+        "computed_at": "data through 2026-07-01",
+        "metrics": {
+          "cpa": {
+            "dlog_median": 0.1293,
+            "pct_effect": 0.138,
+            "mad": 0.3574,
+            "n_days": 6
+          },
+          "cpm": {
+            "dlog_median": 0.0491,
+            "pct_effect": 0.0503,
+            "mad": 0.1381,
+            "n_days": 6
+          },
+          "ctr": {
+            "dlog_median": -0.1465,
+            "pct_effect": -0.1363,
+            "mad": 0.286,
+            "n_days": 6
+          },
+          "cvr": {
+            "dlog_median": 0.052,
+            "pct_effect": 0.0534,
+            "mad": 0.4116,
+            "n_days": 6
+          },
+          "spend": {
+            "dlog_median": 0.168,
+            "pct_effect": 0.1829,
+            "mad": 0.3662,
+            "n_days": 6
+          }
+        },
+        "status": "computed"
+      }
+    }
   }
 }
