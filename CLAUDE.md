@@ -22,7 +22,9 @@ Decomposition: **CPA = CPM ÷ (CTR × CVR)**. Each component implicates a differ
 ## Rules
 
 1. **Recon first, always.** Read existing data/files before writing or modifying anything.
-2. **Secrets discipline:** all keys in `.env`, never in code, never echoed. Use
+2. **Secrets discipline:** all keys in `.env` (local) or environment variables /
+   GitHub Actions Secrets (cloud, CI) — never in code, never echoed, never in
+   URLs (Bearer header only). Use
    `printf '%s'` patterns for any secret handling. The Meta token should be a
    system-user token scoped read-only to `ads_read`. `.env` is gitignored — verify
    before every commit.
@@ -44,6 +46,13 @@ Decomposition: **CPA = CPM ÷ (CTR × CVR)**. Each component implicates a differ
 
 - **Meta Marketing API (direct, `engine/fetch_meta.py`)** — the runtime data layer.
   Bulk paginated pulls to files in `data/meta/`, deterministic re-runs.
+  **Cloud caveat:** Claude Code cloud containers cannot reach
+  `graph.facebook.com` (egress policy 403). The pull runs on GitHub Actions
+  instead (`.github/workflows/daily-pull.yml`, 06:00 UTC daily, secrets from
+  Actions Secrets), which commits refreshed data back to the repo.
+- **`data/meta/` lives in-repo for now** (CSV + parquet + dated
+  `backfill_observations/` snapshots) so cloud sessions are self-sufficient
+  without Meta API access. Revisit if size or privacy becomes a concern.
 - **Meta MCP** — development and verification only: recon, spot-checking engine
   numbers against a second source, Ad Library exploration. Never part of the
   runtime pipeline.
@@ -54,4 +63,5 @@ Decomposition: **CPA = CPM ÷ (CTR × CVR)**. Each component implicates a differ
 
 See §3 of the kickoff brief: `engine/` (baseline, decompose, correlate, verdict,
 fetch), `signals/` (library.json + raw sources), `backtest/` (labeled incidents +
-runner), `data/` (gitignored pulls), `reports/` (generated verdicts).
+runner), `data/` (committed Meta pulls — see data-layer boundaries), `reports/`
+(generated verdicts).

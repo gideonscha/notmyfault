@@ -144,7 +144,6 @@ def _fetch_window(
 ) -> list[dict]:
     url = f"{GRAPH}/{cfg.api_version}/{cfg.ad_account_id}/insights"
     params: dict = {
-        "access_token": cfg.access_token,
         "level": pull["level"],
         "fields": ",".join(pull["fields"]),
         "time_increment": 1,
@@ -208,6 +207,9 @@ def run_pull(name: str, since: dt.date, until: dt.date) -> pd.DataFrame:
     cfg = load_config()
     pull = PULLS[name]
     session = requests.Session()
+    # Token goes in a header, never in the URL: request URLs surface in
+    # tracebacks, proxy logs, and paging "next" links.
+    session.headers["Authorization"] = f"Bearer {cfg.access_token}"
     all_rows: list[dict] = []
     for chunk_start, chunk_end in _chunks(since, until):
         print(f"[{name}] {chunk_start} .. {chunk_end}", flush=True)
