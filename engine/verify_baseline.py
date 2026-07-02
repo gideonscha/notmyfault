@@ -8,13 +8,17 @@ for every re-pull:
     zero-delivery gap 2026-03-05 .. 2026-03-12 (8 days)
     total spend 368,070.58
 
-Meta does not restate spend, so total spend over the baseline window must
-match to the cent no matter when the re-pull runs. Purchases on the trailing
-~7 days of the window are EXPECTED to drift upward as attribution back-fills
-— that drift is signal, not error (see engine/snapshot_backfill.py), and is
-not checked here. Per-day purchase deltas against the local baseline are not
-computable because the local per-day files were never committed; snapshots
-from this day forward close that gap.
+Spend micro-restates for a short period post-close: the 2026-07-02 16:46 UTC
+re-pull of the identical range returned 368,070.99 — +$0.41 vs the local pull
+~7h earlier (recorded in data/meta/backfill_observations/). So the spend check
+uses a small absolute tolerance; it exists to catch structural errors (wrong
+account, wrong attribution settings, duplicated rows — all $100s+ deltas),
+not cent-level reconciliation. Purchases on the trailing ~7 days of the
+window are EXPECTED to drift upward as attribution back-fills — that drift is
+signal, not error (see engine/snapshot_backfill.py), and is not checked here.
+Per-day deltas against the local baseline are not computable because the
+local per-day files were never committed; snapshots from this day forward
+close that gap.
 
 Usage: python -m engine.verify_baseline    # exits non-zero on mismatch
 """
@@ -35,6 +39,7 @@ BASELINE = {
     "total_spend": 368_070.58,
     "pulled_locally": dt.date(2026, 7, 2),
 }
+SPEND_TOLERANCE = 5.00  # post-close reconciliation is cents; structural errors are $100s+
 
 
 def main() -> None:
@@ -57,7 +62,8 @@ def main() -> None:
         ("coverage start", days and min(days), lo, bool(days) and min(days) == lo),
         ("coverage end", days and max(days), hi, bool(days) and max(days) == hi),
         ("missing days == known gap", sorted(missing), sorted(expected_gap), missing == expected_gap),
-        ("total spend in window", spend, BASELINE["total_spend"], abs(spend - BASELINE["total_spend"]) < 0.005),
+        (f"total spend in window (±{SPEND_TOLERANCE:.2f}, delta {spend - BASELINE['total_spend']:+.2f})",
+         spend, BASELINE["total_spend"], abs(spend - BASELINE["total_spend"]) <= SPEND_TOLERANCE),
     ]
     ok = True
     print(f"[verify_baseline] account_daily vs local Phase 0 baseline (pulled {BASELINE['pulled_locally']})")

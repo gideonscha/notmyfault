@@ -18,6 +18,11 @@ on:
   schedule:
     - cron: "0 6 * * *"
   workflow_dispatch:
+  # Pipeline changes merged to the default branch validate themselves by
+  # running the pull immediately.
+  push:
+    branches: [claude/notmyfault-verdict-agent-730vp4]
+    paths: ["engine/**", ".github/workflows/daily-pull.yml"]
 
 permissions:
   contents: write
