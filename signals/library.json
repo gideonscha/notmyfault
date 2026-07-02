@@ -1,0 +1,19 @@
+{
+  "_schema": {
+    "id": "unique slug",
+    "name": "human name",
+    "layer": "EXTERNAL_DEMAND | EXTERNAL_AUCTION | EXTERNAL_PLATFORM",
+    "geo": "US (v1 is US-ringfenced)",
+    "date_start": "YYYY-MM-DD (verified, never guessed)",
+    "date_end": "YYYY-MM-DD",
+    "severity_prior": "1-5",
+    "mechanism": "how it plausibly moves which metric",
+    "source_url": "required before verified may be true",
+    "machine_check": "how to re-verify programmatically",
+    "verified": "bool — unverified records are excluded from verdicts"
+  },
+  "signals": [],
+  "rules": {
+    "_comment": "Recurring signals stored as rules, expanded at query time (Phase 2): paydays 1st/15th, SNAP disbursement windows, month-end, DST transitions, tax-refund season, federal holidays."
+  }
+}

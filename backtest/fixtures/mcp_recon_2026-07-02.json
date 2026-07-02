@@ -1,0 +1,18 @@
+{
+  "_comment": "Meta MCP recon captured 2026-07-02 (verification layer only, brief §9). Used to pin the target ad account for .env and as a second-source reference when validating the Phase 0 direct-API pull.",
+  "target_ad_account": {
+    "ad_account_id": "852673303845594",
+    "ad_account_name": "Magic Pets",
+    "business_id": "2360160461089208",
+    "business_name": "Magic Portraits",
+    "currency": "USD",
+    "account_status": "ACTIVE",
+    "source": "mcp__META__ads_get_ad_accounts, 2026-07-02"
+  },
+  "performance_trend_snapshot": {
+    "captured": "2026-07-02",
+    "tool": "mcp__META__ads_insights_performance_trend (analysis_level=ADSET)",
+    "note": "qualitative second-source snapshot; raw numeric spot-checks to be done against Ads Manager or MCP once direct pull runs",
+    "result": "Cohort: OFFSITE_CONVERSIONS / offsite_conversion.purchase / prospecting. Analysis metric CTR. Adsets: ASC_TESTCAMPAIGN_FREEMUGSPECIAL (52621088515834) CTR 17.91% change, trend BAD; ASC - Magic Portraits (6976513157230) CTR 5.92% change, trend GOOD."
+  }
+}

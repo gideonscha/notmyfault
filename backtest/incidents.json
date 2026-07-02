@@ -1,0 +1,32 @@
+{
+  "_comment": "Labeled ground truth (brief §8). The engine is run BLIND across full history; these labels are only compared against its output afterwards.",
+  "incidents": [
+    {
+      "id": "eshkol-link-break",
+      "name": "eshkol link break (fbclid loss)",
+      "window_start": null,
+      "window_end": "2025-05-15",
+      "window_note": "pre-May 15, 2025 fix; exact onset to be recovered by the engine",
+      "ground_truth": "INTERNAL_FUNNEL",
+      "notes": "attribution/tracking break — fbclid lost on landing"
+    },
+    {
+      "id": "spend-doubling-auction-inflation",
+      "name": "Spend-doubling auction inflation (CPA $171 era)",
+      "window_start": "2025-03-01",
+      "window_end": "2025-05-31",
+      "window_note": "spring 2025, approximate; exact window to be recovered by the engine",
+      "ground_truth": "INTERNAL_ADS",
+      "notes": "auction response to advertiser's own spend increase; Herrmann hypothesis ruled out"
+    },
+    {
+      "id": "jun25-checkout-entry-drop",
+      "name": "Jun 25, 2026 checkout-entry drop (~21%)",
+      "window_start": "2026-06-25",
+      "window_end": null,
+      "window_note": "ongoing as of kickoff",
+      "ground_truth": "UNRESOLVED",
+      "notes": "publish suspected, causation unproven — the live case the engine must adjudicate; headline deliverable of Phase 4"
+    }
+  ]
+}
