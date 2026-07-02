@@ -10,7 +10,8 @@
     "mechanism": "how it plausibly moves which metric",
     "source_url": "required before verified may be true",
     "machine_check": "how to re-verify programmatically",
-    "verified": "bool \u2014 unverified records are excluded from verdicts"
+    "verified": "bool \u2014 unverified records are excluded from verdicts",
+    "direction": "suppressive | stimulative | mixed \u2014 PRIOR direction of effect on demand/performance from the mechanism; the account-specific coefficient may contradict it (and that contradiction is signal)"
   },
   "_pending": "library_seed.json merge pending \u2014 the attachment did not reach the cloud container (2026-07-02). Re-attach to merge; records below were sourced and verified independently.",
   "signals": [
@@ -25,7 +26,8 @@
       "mechanism": "No delivery for 14 days: 2026-02-27..03-04 return rows with spend=0 and impressions=0, 2026-03-05..03-12 return no rows at all. 2026-03-02 records 2 purchases against $0 spend (lagged attribution). Excluded from all baselines (engine/baseline.py EXCLUDE_DATES); post-resume days carry learning-phase reset risk.",
       "source_url": "https://github.com/gideonscha/notmyfault/blob/4845941/data/meta/account_daily.csv",
       "machine_check": "python -c \"import pandas as pd; df=pd.read_csv('data/meta/account_daily.csv',parse_dates=['date_start']); z=df[df.spend==0].date_start.dt.date.tolist(); print(z)\" -> exactly 2026-02-27..2026-03-04; verify_pull reports 2026-03-05..12 as the missing-day gap",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "acct-checkout-event-shift-2026-05-24",
@@ -38,7 +40,8 @@
       "mechanism": "checkouts_initiated/inline_link_clicks steps from a ~0.05 monthly median (Feb-May 23) to ~0.35 on exactly 2026-05-24 (47 -> 287 checkouts day-over-day on similar click volume) and persists. Consistent with an event-definition or tracking change, not gradual demand movement. Any checkout_rate comparison spanning this date is invalid without segmenting; the 2026-06-25 checkout-entry drop (backtest incident jun25-checkout-entry-drop) is measured against POST-shift levels.",
       "source_url": "https://github.com/gideonscha/notmyfault/blob/4845941/data/meta/account_daily.csv",
       "machine_check": "python -c \"import pandas as pd; df=pd.read_csv('data/meta/account_daily.csv',parse_dates=['date_start']); r=df.set_index(df.date_start.dt.date); r['rate']=r.checkouts_initiated/r.inline_link_clicks; import datetime as dt; print(r.loc[dt.date(2026,5,23),'rate'], r.loc[dt.date(2026,5,24),'rate'])\" -> ~0.08 vs ~0.40",
-      "verified": true
+      "verified": true,
+      "direction": "mixed"
     },
     {
       "id": "ext-cpi-2025-12-18",
@@ -51,7 +54,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Elevated salience this cycle: first CPI after the 43-day government shutdown; no October reference data was ever collected. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_12182025.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_12182025); see also https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-01-13",
@@ -64,7 +68,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_01132026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_01132026)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-02-13",
@@ -77,7 +82,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_02132026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_02132026); scheduled date was Feb 11 (see https://www.bls.gov/bls/2025-lapse-revised-release-dates.htm)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-03-11",
@@ -90,7 +96,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_03112026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_03112026)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-04-10",
@@ -103,7 +110,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_04102026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_04102026)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-05-12",
@@ -116,7 +124,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_05122026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_05122026)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-cpi-2026-06-10",
@@ -129,7 +138,8 @@
       "mechanism": "08:30 ET news-cycle attention + consumer-sentiment shock; plausible same-day/next-day demand (CVR) mover. Headline y/y ran 2.4% (Feb) -> 3.3% (Mar) -> 3.8% (Apr) -> 4.2% (May reference), raising salience through spring 2026. Correlation only unless the cpi_release class coefficient is applied.",
       "source_url": "https://www.bls.gov/news.release/archives/cpi_06102026.htm",
       "machine_check": "BLS archive URL encodes release date (cpi_06102026)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     },
     {
       "id": "ext-dst-2026-03-08",
@@ -142,7 +152,8 @@
       "mechanism": "Clocks advance 02:00 local; population-level sleep disruption and a one-hour shift of daily-routine attention windows vs ad-delivery pacing for several days. Statutory date (Energy Policy Act of 2005): second Sunday in March. NOTE: falls inside the account delivery pause (2026-02-27..03-12), so it is unobservable in this account's history. Correlation only, coefficient unknown.",
       "source_url": "https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst",
       "machine_check": "second Sunday of March 2026 == 2026-03-08 (deterministic)",
-      "verified": true
+      "verified": true,
+      "direction": "suppressive"
     }
   ],
   "rules": {
@@ -192,7 +203,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "stimulative"
     },
     "payday_15th": {
       "name": "Payday: 15th of month",
@@ -239,7 +251,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "stimulative"
     },
     "month_end": {
       "name": "Month end (last calendar day)",
@@ -285,7 +298,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "suppressive"
     },
     "snap_window": {
       "name": "SNAP issuance window (days 1-10, US aggregate approximation)",
@@ -333,7 +347,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "stimulative"
     },
     "federal_holiday": {
       "name": "US federal holiday (class)",
@@ -389,7 +404,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "mixed"
     },
     "dst_transition": {
       "name": "DST transition day (class)",
@@ -404,7 +420,8 @@
         "computed_at": "data through 2026-07-01",
         "metrics": null,
         "status": "prior only \u2014 1 occurrence(s) < 4, coefficient unknown"
-      }
+      },
+      "direction": "suppressive"
     },
     "tax_refund_season": {
       "name": "US tax refund season (approximate window Feb 1 - Apr 15)",
@@ -421,7 +438,8 @@
         "computed_at": "data through 2026-07-01",
         "metrics": null,
         "status": "prior only \u2014 1 occurrence(s) < 4, coefficient unknown"
-      }
+      },
+      "direction": "stimulative"
     },
     "cpi_release": {
       "name": "CPI release day (class)",
@@ -468,7 +486,8 @@
           }
         },
         "status": "computed"
-      }
+      },
+      "direction": "suppressive"
     }
   }
 }
