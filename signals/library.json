@@ -2,7 +2,7 @@
   "_schema": {
     "id": "unique slug",
     "name": "human name",
-    "layer": "EXTERNAL_DEMAND | EXTERNAL_AUCTION | EXTERNAL_PLATFORM",
+    "layer": "EXTERNAL_DEMAND | EXTERNAL_AUCTION | EXTERNAL_PLATFORM | ACCOUNT (account-level events observed in the account's own data)",
     "geo": "US (v1 is US-ringfenced)",
     "date_start": "YYYY-MM-DD (verified, never guessed)",
     "date_end": "YYYY-MM-DD",
@@ -12,7 +12,34 @@
     "machine_check": "how to re-verify programmatically",
     "verified": "bool — unverified records are excluded from verdicts"
   },
-  "signals": [],
+  "signals": [
+    {
+      "id": "acct-delivery-pause-2026-02-27",
+      "name": "Account delivery pause, Feb 27 - Mar 12 2026 (zero delivery 14 days)",
+      "layer": "ACCOUNT",
+      "geo": "US",
+      "date_start": "2026-02-27",
+      "date_end": "2026-03-12",
+      "severity_prior": 5,
+      "mechanism": "No delivery for 14 days: 2026-02-27..03-04 return rows with spend=0 and impressions=0, 2026-03-05..03-12 return no rows at all. 2026-03-02 records 2 purchases against $0 spend (lagged attribution). Excluded from all baselines (engine/baseline.py EXCLUDE_DATES); post-resume days carry learning-phase reset risk.",
+      "source_url": "https://github.com/gideonscha/notmyfault/blob/4845941/data/meta/account_daily.csv",
+      "machine_check": "python -c \"import pandas as pd; df=pd.read_csv('data/meta/account_daily.csv',parse_dates=['date_start']); z=df[df.spend==0].date_start.dt.date.tolist(); print(z)\" -> exactly 2026-02-27..2026-03-04; verify_pull reports 2026-03-05..12 as the missing-day gap",
+      "verified": true
+    },
+    {
+      "id": "acct-checkout-event-shift-2026-05-24",
+      "name": "Checkout-event level shift, May 24 2026 (rate x~6.5 overnight)",
+      "layer": "ACCOUNT",
+      "geo": "US",
+      "date_start": "2026-05-24",
+      "date_end": null,
+      "severity_prior": 3,
+      "mechanism": "checkouts_initiated/inline_link_clicks steps from a ~0.05 monthly median (Feb-May 23) to ~0.35 on exactly 2026-05-24 (47 -> 287 checkouts day-over-day on similar click volume) and persists. Consistent with an event-definition or tracking change, not gradual demand movement. Any checkout_rate comparison spanning this date is invalid without segmenting; the 2026-06-25 checkout-entry drop (backtest incident jun25-checkout-entry-drop) is measured against POST-shift levels.",
+      "source_url": "https://github.com/gideonscha/notmyfault/blob/4845941/data/meta/account_daily.csv",
+      "machine_check": "python -c \"import pandas as pd; df=pd.read_csv('data/meta/account_daily.csv',parse_dates=['date_start']); r=df.set_index(df.date_start.dt.date); r['rate']=r.checkouts_initiated/r.inline_link_clicks; import datetime as dt; print(r.loc[dt.date(2026,5,23),'rate'], r.loc[dt.date(2026,5,24),'rate'])\" -> ~0.08 vs ~0.40",
+      "verified": true
+    }
+  ],
   "rules": {
     "_comment": "Recurring signals stored as rules, expanded at query time (Phase 2): paydays 1st/15th, SNAP disbursement windows, month-end, DST transitions, tax-refund season, federal holidays."
   }

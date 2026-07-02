@@ -52,7 +52,10 @@ reports/    generated verdict reports
   2026-07-02, verified against the local baseline — spend +$0.41 post-close
   restatement, all other checks exact)
 - [x] Phase 0 — daily-pull workflow, baseline verifier, backfill snapshotter
-- [ ] Phase 1 — baseline + decomposition
+- [x] Phase 1 — baseline + decomposition (trailing-90d DOW-adjusted self-baselines,
+  log-space CPA = CPM/(1000·CTR·CVR) decomposition, anomaly windows ≥2 days beyond
+  ±2σ → `reports/anomaly_timeline.md`; delivery pause + checkout-event shift
+  registered as ACCOUNT events in `signals/library.json`)
 - [ ] Phase 2 — signal library seed
 - [ ] Phase 3 — correlator + verdict engine
 - [ ] Phase 4 — blind backtest (headline: Jun 25, 2026 verdict)
