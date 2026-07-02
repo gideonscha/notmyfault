@@ -19,8 +19,20 @@ python -m engine.fetch_meta            # trailing 365 days, all four pulls
 python -m engine.verify_pull           # row counts, date coverage, sample rows
 ```
 
-Pulls land in `data/meta/` (gitignored) as CSV + parquet:
-`account_daily`, `campaign_daily`, `account_daily_placement`, `account_daily_demo`.
+Pulls land in `data/meta/` (committed to the repo — see `CLAUDE.md`) as CSV +
+parquet: `account_daily`, `campaign_daily`, `account_daily_placement`,
+`account_daily_demo`. In production the pull runs daily at 06:00 UTC via
+`.github/workflows/daily-pull.yml` (GitHub Actions runners can reach
+`graph.facebook.com`; Claude Code cloud containers cannot — egress policy).
+Each run also writes a dated trailing-window snapshot to
+`data/meta/backfill_observations/` (`engine/snapshot_backfill.py`); the
+accumulated per-day deltas are the account's empirical attribution-lag curve.
+`engine/verify_baseline.py` pins every re-pull to the frozen local Phase 0
+aggregates (216 rows / $368,070.58 / 2025-11-20→2026-07-01 / gap 2026-03-05→12).
+
+Workflow setup (one-time): add `META_ACCESS_TOKEN` and `META_AD_ACCOUNT_ID`
+to the repo's Actions Secrets, and note the cron only fires from the default
+branch.
 
 ## Layout
 
@@ -36,7 +48,10 @@ reports/    generated verdict reports
 ## Status
 
 - [x] Phase 0 — scaffold, .env handling, pull scripts
-- [ ] Phase 0 — 12-month data pull **(blocked: META_ACCESS_TOKEN must be added to `.env` from a machine that has it — this remote session had no access to the magic-portraits-ads skill's credentials)**
+- [ ] Phase 0 — full-history data pull **(blocked in cloud: egress policy denies
+  `graph.facebook.com`; run `.github/workflows/daily-pull.yml` via Actions after
+  adding secrets, or re-pull locally and commit `data/meta/`)**
+- [x] Phase 0 — daily-pull workflow, baseline verifier, backfill snapshotter
 - [ ] Phase 1 — baseline + decomposition
 - [ ] Phase 2 — signal library seed
 - [ ] Phase 3 — correlator + verdict engine

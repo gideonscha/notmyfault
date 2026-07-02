@@ -3,10 +3,9 @@
 .env.*
 !.env.example
 
-# Pulled account data (private business data, regenerable via engine/fetch_meta.py)
-data/meta/*
+# data/meta/ is committed (see CLAUDE.md — cloud sessions can't reach the Meta
+# API, so the repo carries the data). Site data remains local-only.
 data/site/*
-!data/meta/.gitkeep
 !data/site/.gitkeep
 
 # Raw fetched evidence can be large; committed selectively

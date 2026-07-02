@@ -1,0 +1,71 @@
+# Daily Meta insights pull + attribution-lag snapshot.
+#
+# Runs at 06:00 UTC, after Meta's overnight restatement of the prior day has
+# mostly settled. GitHub Actions runners have direct egress to
+# graph.facebook.com — Claude Code cloud containers do not (egress policy
+# blocks the host), so this workflow is the runtime data layer's scheduler
+# and the reason data/meta/ lives in-repo.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   META_ACCESS_TOKEN    system-user token, read-only, scoped to ads_read
+#   META_AD_ACCOUNT_ID   act_852673303845594 (not secret, but kept with its token)
+#
+# NOTE: scheduled workflows only fire from the repository's DEFAULT branch.
+
+name: daily-pull
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-pull
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests pandas pyarrow
+
+      - name: Pull full account history from Meta Marketing API
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+        # Fixed --since so the window never slides past the account's first
+        # delivery (2025-11-20); a trailing-365 default would start dropping
+        # early history in Nov 2026.
+        run: python -m engine.fetch_meta --since 2025-11-01
+
+      - name: Verify pull (coverage, gaps, totals)
+        run: python -m engine.verify_pull
+
+      - name: Verify against frozen Phase 0 baseline
+        run: python -m engine.verify_baseline
+
+      - name: Snapshot trailing attribution window (lag-curve datapoint)
+        run: python -m engine.snapshot_backfill
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/meta
+          if git diff --cached --quiet; then
+            echo "no data changes"
+            exit 0
+          fi
+          git commit -m "data: daily Meta pull $(date -u +%F)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
