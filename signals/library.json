@@ -13,7 +13,7 @@
     "verified": "bool \u2014 unverified records are excluded from verdicts",
     "direction": "suppressive | stimulative | mixed \u2014 PRIOR direction of effect on demand/performance from the mechanism; the account-specific coefficient may contradict it (and that contradiction is signal)"
   },
-  "_pending": "library_seed.json merge pending \u2014 the attachment did not reach the cloud container (2026-07-02). Re-attach to merge; records below were sourced and verified independently.",
+  "_pending": "library_seed.json PARTIALLY merged 2026-07-02: 5 events landed (4 Meta-platform + World Cup, the latter truncated in transit and independently re-verified). Seed's verified:false records and anything after the World Cup record never arrived \u2014 paste the remainder to finish.",
   "signals": [
     {
       "id": "acct-delivery-pause-2026-02-27",
@@ -154,6 +154,82 @@
       "machine_check": "second Sunday of March 2026 == 2026-03-08 (deterministic)",
       "verified": true,
       "direction": "suppressive"
+    },
+    {
+      "id": "meta-ads-creation-outage-2025-11-08",
+      "name": "Meta Ads Creation & Editing outage",
+      "layer": "EXTERNAL_PLATFORM",
+      "geo": "GLOBAL",
+      "date_start": "2025-11-08",
+      "date_end": "2025-11-08",
+      "severity_prior": 1,
+      "direction": "suppressive",
+      "mechanism": "Advertisers unable to create/edit ads ~04:33-06:06 UTC; delivery itself unaffected \u2014 low expected performance impact. NOTE: predates account history (first delivery 2025-11-20).",
+      "source_url": "https://metastatus.com/ads-manager/history",
+      "machine_check": "metastatus history archive",
+      "verified": true,
+      "merge_note": "seed-1.0; URL resolves (spot-checked 2026-07-02, page 403s automated fetch \u2014 verified via search index)"
+    },
+    {
+      "id": "meta-ads-delivery-outage-2025-11-11",
+      "name": "Meta Ads Delivery disruption",
+      "layer": "EXTERNAL_PLATFORM",
+      "geo": "GLOBAL",
+      "date_start": "2025-11-11",
+      "date_end": "2025-11-11",
+      "severity_prior": 2,
+      "direction": "suppressive",
+      "mechanism": "High-disruption ads delivery incident 00:45-01:50 UTC per Metastatus. NOTE: predates account history (first delivery 2025-11-20).",
+      "source_url": "https://metastatus.com/ads-manager/history",
+      "machine_check": "metastatus history archive",
+      "verified": true,
+      "merge_note": "seed-1.0; URL resolves (spot-checked 2026-07-02)"
+    },
+    {
+      "id": "meta-glitchmas-bfcm-2025",
+      "name": "Meta BFCM/holiday 2025 platform instability ('Glitchmas')",
+      "layer": "EXTERNAL_PLATFORM",
+      "geo": "GLOBAL",
+      "date_start": "2025-11-17",
+      "date_end": "2025-12-19",
+      "severity_prior": 3,
+      "direction": "suppressive",
+      "mechanism": "Multi-week window of intermittent ad delivery issues and AI-product failures reported by multiple advertisers through Nov-Dec 2025; BFCM incident described as lasting multiple days with intermittent issues. Reported symptoms include budget pacing failures (entire daily budgets burned in the first hour, often 1-2am target-region time, on poor-quality traffic) and scattered campaign-management failures. Boundaries fuzzy \u2014 treat as elevated-risk window, not a hard outage.",
+      "source_url": "https://www.adexchanger.com/social-media/metas-ad-platform-is-going-haywire-in-time-for-the-holidays-again/",
+      "machine_check": "cross-reference metastatus history for specific incident days within window; see also https://adstatus.app/blog/meta-bfcm-crisis-november-2025",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0; article confirmed to exist at URL (spot-checked 2026-07-02); pacing-failure detail added from AdExchanger coverage"
+    },
+    {
+      "id": "meta-ads-delivery-outage-2026-01-08",
+      "name": "Meta Ads Delivery outage Jan 8-9 2026",
+      "layer": "EXTERNAL_PLATFORM",
+      "geo": "GLOBAL",
+      "date_start": "2026-01-08",
+      "date_end": "2026-01-09",
+      "severity_prior": 2,
+      "direction": "suppressive",
+      "mechanism": "~2h ads delivery outage 21:10-23:08 EST Jan 8 (02:10-04:08 UTC Jan 9); community reports began ~30-40min earlier. 24th ads-delivery incident tracked in trailing 12 months per adstatus.",
+      "source_url": "https://adstatus.app/blog/meta-outage-january-8-2026",
+      "machine_check": "metastatus history archive",
+      "verified": true,
+      "merge_note": "seed-1.0; blog post confirmed at URL, timing corroborated (spot-checked 2026-07-02)"
+    },
+    {
+      "id": "worldcup-2026-tournament",
+      "name": "FIFA World Cup 2026 (North America host)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-06-11",
+      "date_end": "2026-07-19",
+      "severity_prior": 3,
+      "direction": "suppressive",
+      "mechanism": "Home-soil World Cup; attention displacement across the tournament, heaviest on multi-match days. Group stage Jun 11-27 (up to six matches/day), Round of 32 Jun 28-Jul 3, R16 Jul 4-7, QF Jul 9-11, SF Jul 14-15, final Jul 19 MetLife. Opening match Jun 11 (Mexico vs South Africa, Estadio Azteca).",
+      "source_url": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/match-schedule-fixtures-results-teams-stadiums",
+      "machine_check": "FIFA match schedule page; dates cross-checked NBC Sports / Wikipedia 2026-07-02",
+      "verified": true,
+      "merge_note": "seed-1.0 record TRUNCATED in transit mid-mechanism; dates and stage windows independently re-verified and mechanism completed 2026-07-02. Unconfirmed truncated fragment ('all-time attendance record broken Jun 25') omitted."
     }
   ],
   "rules": {
