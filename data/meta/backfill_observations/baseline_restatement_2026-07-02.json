@@ -1,0 +1,22 @@
+{
+  "observation": "aggregate spend restatement between two same-day pulls of the identical range",
+  "range": "2025-11-20..2026-07-01",
+  "pull_a": {
+    "source": "local Phase 0 pull (per-day files never committed; aggregates only)",
+    "pulled_at_utc": "2026-07-02T~10:00",
+    "rows": 216,
+    "total_spend": 368070.58
+  },
+  "pull_b": {
+    "source": "GitHub Actions daily-pull run 28606660137",
+    "pulled_at_utc": "2026-07-02T16:46",
+    "rows": 216,
+    "total_spend": 368070.99,
+    "trailing_day_purchases_asof": {"2026-06-29": 36, "2026-06-30": 32, "2026-07-01": 32}
+  },
+  "spend_delta": 0.41,
+  "notes": [
+    "First attribution-lag datapoint. Spend DOES micro-restate post-close, contradicting the initial 'spend never restates' assumption; engine/verify_baseline.py spend check now carries a ±$5 tolerance.",
+    "Per-day purchase deltas between pull_a and pull_b are not computable — pull_a's per-day files were never committed. Trailing-day purchase values from pull_b are recorded above as the reference point; per-day lag tracking proper starts with the first account_daily_asof_*.csv snapshot in this directory (engine/snapshot_backfill.py, run daily by the workflow)."
+  ]
+}
