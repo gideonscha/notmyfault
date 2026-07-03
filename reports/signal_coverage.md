@@ -1,6 +1,6 @@
 # Signal Coverage — Phase 1 anomaly windows x signal library (no verdicts)
 
-29 anomaly windows (engine/baseline.py, |z| >= 2 x >= 2d) joined against 20 dated signals and 8 recurring rules. Events marked *adjacent* start within ±2 days of the window. Rule coefficients are account-specific median log-residual effects (engine/rules.py); 'prior only' = fewer than 4 occurrences, coefficient unknown (anti-horoscope rule). Classification is deliberately absent — Phase 3.
+29 anomaly windows (engine/baseline.py, |z| >= 2 x >= 2d) joined against 24 dated signals and 8 recurring rules. Events marked *adjacent* start within ±2 days of the window. Rule coefficients are account-specific median log-residual effects (engine/rules.py); 'prior only' = fewer than 4 occurrences, coefficient unknown (anti-horoscope rule). Classification is deliberately absent — Phase 3.
 
 NOTE: signals/library.json carries `_pending`: the library_seed.json attachment did not reach the container; this report regenerates in seconds once the seed is merged (`python -m engine.coverage`).
 
@@ -27,16 +27,16 @@ NOTE: signals/library.json carries `_pending`: the library_seed.json attachment 
 | 19 | 2026-04-08 .. 2026-04-09 | checkout_rate | high | +93.1% | — | ext-cpi-2026-04-10 | snap_window (no coef for checkout_rate); tax_refund_season (prior only) |
 | 20 | 2026-04-10 .. 2026-04-11 | ctr | low | -37.5% | ext-cpi-2026-04-10 | — | cpi_release (-13.6%); snap_window (-20.2%); tax_refund_season (prior only) |
 | 21 | 2026-04-13 .. 2026-04-16 | spend | high | +90.7% | — | — | payday_15th (-23.2%); tax_refund_season (prior only) |
-| 22 | 2026-04-19 .. 2026-04-21 | spend | high | +78.3% | — | — | — |
+| 22 | 2026-04-19 .. 2026-04-21 | spend | high | +78.3% | mothers-day-2026 | — | — |
 | 23 | 2026-05-19 .. 2026-05-20 | spend | low | -49.7% | — | — | — |
 | 24 | 2026-05-21 .. 2026-05-24 | cpm | high | +32.5% | acct-checkout-event-shift-2026-05-24 | — | — |
-| 25 | 2026-05-24 .. 2026-06-25 | checkout_rate | high | +484.0% | acct-checkout-event-shift-2026-05-24; ext-cpi-2026-06-10; worldcup-2026-tournament; worldcup-2026-usmnt-matchdays | — | cpi_release (no coef for checkout_rate); federal_holiday (no coef for checkout_rate); month_end (no coef for checkout_rate); payday_15th (no coef for checkout_rate); payday_1st (no coef for checkout_rate); snap_window (no coef for checkout_rate) |
+| 25 | 2026-05-24 .. 2026-06-25 | checkout_rate | high | +484.0% | acct-checkout-event-shift-2026-05-24; ext-cpi-2026-06-10; worldcup-2026-tournament; worldcup-2026-usmnt-matchdays; fathers-day-2026 | — | cpi_release (no coef for checkout_rate); federal_holiday (no coef for checkout_rate); month_end (no coef for checkout_rate); payday_15th (no coef for checkout_rate); payday_1st (no coef for checkout_rate); snap_window (no coef for checkout_rate) |
 | 26 | 2026-05-26 .. 2026-05-27 | spend | low | -52.7% | acct-checkout-event-shift-2026-05-24 | — | — |
-| 27 | 2026-06-04 .. 2026-06-05 | cpm | high | +23.1% | acct-checkout-event-shift-2026-05-24 | — | snap_window (-2.2%) |
-| 28 | 2026-06-07 .. 2026-06-08 | cpa | low | -39.2% | acct-checkout-event-shift-2026-05-24 | ext-cpi-2026-06-10 | snap_window (+6.6%) |
+| 27 | 2026-06-04 .. 2026-06-05 | cpm | high | +23.1% | acct-checkout-event-shift-2026-05-24; fathers-day-2026 | — | snap_window (-2.2%) |
+| 28 | 2026-06-07 .. 2026-06-08 | cpa | low | -39.2% | acct-checkout-event-shift-2026-05-24; fathers-day-2026 | ext-cpi-2026-06-10 | snap_window (+6.6%) |
 | 29 | 2026-06-26 .. 2026-06-28 | cpa | high | +59.1% | acct-checkout-event-shift-2026-05-24; worldcup-2026-tournament | worldcup-2026-usmnt-matchdays | — |
 
-## Windows with no dated-event coverage (7)
+## Windows with no dated-event coverage (6)
 
 Anomalies explained (if at all) only by recurring rules or by nothing in the library yet — the priority list for library expansion (and the honest 'unexplained' pool Phase 3 must be willing to leave unexplained):
 
@@ -45,5 +45,4 @@ Anomalies explained (if at all) only by recurring rules or by nothing in the lib
 - #16 ctr low 2026-03-26 .. 2026-04-05 (-33.2%)
 - #17 spend high 2026-04-04 .. 2026-04-05 (+112.6%)
 - #21 spend high 2026-04-13 .. 2026-04-16 (+90.7%)
-- #22 spend high 2026-04-19 .. 2026-04-21 (+78.3%)
 - #23 spend low 2026-05-19 .. 2026-05-20 (-49.7%)

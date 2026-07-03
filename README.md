@@ -59,7 +59,7 @@ reports/    generated verdict reports
 - [x] Phase 2 — signal library build-out (7 verified CPI releases incl. shutdown
   reschedules, DST, 8 recurring rules with account-specific coefficients via
   `engine/rules.py`; coverage join in `reports/signal_coverage.md`; backtest split
-  into testable/untestable). **Pending: library_seed.json merge — attachment never
-  reached the cloud container; re-attach and re-run `python -m engine.rules && python -m engine.coverage`**
+  into testable/untestable). Seed fully merged 2026-07-02: 24 dated signals, all
+  seven verified:false records confirmed and flipped (none excluded).
 - [ ] Phase 3 — correlator + verdict engine
 - [ ] Phase 4 — blind backtest (headline: Jun 25, 2026 verdict)

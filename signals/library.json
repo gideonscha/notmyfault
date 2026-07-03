@@ -13,7 +13,7 @@
     "verified": "bool \u2014 unverified records are excluded from verdicts",
     "direction": "suppressive | stimulative | mixed \u2014 PRIOR direction of effect on demand/performance from the mechanism; the account-specific coefficient may contradict it (and that contradiction is signal)"
   },
-  "_pending": "library_seed.json merge: part 1 of remainder merged 2026-07-02 (5 events, all 4 verified:false records confirmed and flipped). Part 2 of 2 still pending.",
+  "_pending": "library_seed.json FULLY merged 2026-07-02 (part 1: 5 events incl. truncated World Cup record re-verified; remainder parts 1+2: 9 events, all 7 verified:false records confirmed and flipped, none excluded).",
   "signals": [
     {
       "id": "acct-delivery-pause-2026-02-27",
@@ -312,6 +312,69 @@
       "machine_check": "date confirmed against Wikipedia + levisstadium.com event page",
       "verified": true,
       "merge_note": "seed-1.0 part 1; was verified:false \u2014 date confirmed Feb 8 2026 (Wikipedia, Levi's Stadium), CPM-context note added per machine_check, flipped 2026-07-02"
+    },
+    {
+      "id": "valentines-2026",
+      "name": "Valentine's Day 2026",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-01-25",
+      "date_end": "2026-02-14",
+      "severity_prior": 3,
+      "direction": "stimulative",
+      "mechanism": "Gifting-vertical tailwind (pet/family portraits qualify); demand builds ~3 weeks out, cliff after Feb 14 with shipping cutoff ~Feb 7-9.",
+      "source_url": "https://nrf.com/topics/holiday-and-seasonal-trends/valentines-day",
+      "machine_check": "fixed calendar (Feb 14); window start is a build-up convention",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0 part 2; was verified:false \u2014 Feb 14 is deterministic, flipped 2026-07-02; window start conventional"
+    },
+    {
+      "id": "mothers-day-2026",
+      "name": "Mother's Day 2026 (US) \u2014 May 10",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-04-20",
+      "date_end": "2026-05-10",
+      "severity_prior": 4,
+      "direction": "stimulative",
+      "mechanism": "Strongest gifting window for family/pet portrait vertical; date CONFIRMED 2026-05-10 (second Sunday of May, deterministic). Post-holiday demand cliff follows. Note: overlaps the April spend-surge windows detected in Phase 1 \u2014 advertiser plausibly scaled INTO the gifting window (spend surges may be INTERNAL_ADS response to this tailwind, not independent).",
+      "source_url": "https://nrf.com/topics/holiday-and-seasonal-trends/mothers-day",
+      "machine_check": "second Sunday of May 2026 == 2026-05-10 (deterministic)",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0 part 2; was verified:false \u2014 date confirmed by weekday rule, flipped 2026-07-02; window start conventional"
+    },
+    {
+      "id": "fathers-day-2026",
+      "name": "Father's Day 2026 (US) \u2014 June 21",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-06-01",
+      "date_end": "2026-06-21",
+      "severity_prior": 3,
+      "direction": "stimulative",
+      "mechanism": "Gifting tailwind ending 2026-06-21 (CONFIRMED: third Sunday of June, deterministic); post-Father's-Day demand cliff Jun 22+ is a confound for the live Jun 25+ case and must be quantified.",
+      "source_url": "https://nrf.com/topics/holiday-and-seasonal-trends/fathers-day",
+      "machine_check": "third Sunday of June 2026 == 2026-06-21 (deterministic)",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0 part 2; was verified:false \u2014 date confirmed by weekday rule, flipped 2026-07-02; window start conventional"
+    },
+    {
+      "id": "july4-semiquincentennial-2026",
+      "name": "July 4, 2026 \u2014 US Semiquincentennial",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-07-03",
+      "date_end": "2026-07-05",
+      "severity_prior": 4,
+      "direction": "suppressive",
+      "mechanism": "250th-anniversary July 4 \u2014 larger-than-normal holiday attention drain, plus World Cup R16 running concurrently and special ceremonies scheduled at World Cup venues. NOTE: beyond current data window (ends 2026-07-01) \u2014 forward-looking record for the next pull.",
+      "source_url": "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup",
+      "machine_check": "fixed calendar",
+      "verified": true,
+      "merge_note": "seed-1.0 part 2; arrived verified:true, source resolves"
     }
   ],
   "rules": {
