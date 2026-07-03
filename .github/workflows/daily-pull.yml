@@ -53,6 +53,12 @@ jobs:
         # early history in Nov 2026.
         run: python -m engine.fetch_meta --since 2025-11-01
 
+      - name: Pull account activity log (INTERNAL_ADS evidence stream)
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+        run: python -m engine.fetch_activities --since 2025-11-01
+
       - name: Verify pull (coverage, gaps, totals)
         run: python -m engine.verify_pull
 
