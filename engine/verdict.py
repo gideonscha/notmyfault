@@ -30,8 +30,9 @@ rejections):
   R4 UNEXPLAINED — explained_share < UNEXPLAINED_BELOW and no strong
      class evidence. A legitimate verdict: residual is never assigned to
      the nearest plausible story. INTERNAL_FUNNEL is only ever assigned on
-     site-change evidence, which no current stream provides — it can appear
-     only via future evidence streams.
+     site-change evidence — the SITE_DEPLOY stream (signals/
+     deploy_timeline.json) provides candidates with earliest-possible-live
+     semantics; v1 surfaces them unquantified rather than auto-assigning.
 
 Confidence = explained_share for coefficient-backed verdicts, with a bonus
 for corroborating correlation-only events (+0.05 each, max +0.15), 0.85 base
@@ -137,6 +138,27 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
         rejected.append(("INTERNAL_ADS", "no budget/status/bid/targeting/structure changes in-window or "
                                          f"in the preceding {co.LOOKBACK_HOURS}h"))
 
+    # ---- SITE_DEPLOY stream (INTERNAL_FUNNEL candidates) ----
+    deploy_note = None
+    funnel_deploys = [d for d in ledger.get("deploys", [])
+                      if d["layer_candidate"] == "INTERNAL_FUNNEL" and d["timing"] != "post-onset"]
+    reactive_deploys = [d for d in ledger.get("deploys", [])
+                        if d["layer_candidate"] == "REACTIVE_ACTION" or d["timing"] == "post-onset"]
+    if funnel_deploys:
+        ids = ", ".join(d["id"] for d in funnel_deploys)
+        deploy_note = (f"SITE_DEPLOY: {ids} ({funnel_deploys[0]['timing']}, publish time unconfirmed — "
+                       "commit time is earliest-possible-live) touches the funnel — INTERNAL_FUNNEL "
+                       "candidate, unquantified (no effect model for deploys in v1).")
+    if reactive_deploys:
+        tags.append("REACTIVE_ACTION")
+        rejected.append(("INTERNAL_FUNNEL (via post-onset deploy)",
+                         f"{', '.join(d['id'] for d in reactive_deploys)} deployed after onset — "
+                         "response/tail-shaping, not an onset cause"))
+    if not ledger.get("deploys") and ledger.get("deploy_stream_available"):
+        rejected.append(("INTERNAL_FUNNEL", "no site deploys recorded in-window or in the preceding "
+                                            f"{co.LOOKBACK_HOURS}h — CAVEAT: the deploy timeline is a "
+                                            "curated extract, not exhaustive; weak rejection"))
+
     # ---- R2: quantified layers ----
     layer_dlog: dict[str, float] = {}
     for x in attr["explained"]:
@@ -225,6 +247,8 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
                           + f"; residual {1-total_explained:.0%} unexplained.")
             if act_note:
                 reason += " " + act_note
+            if deploy_note:
+                reason += " " + deploy_note
             return {"verdict": cls, "confidence": conf, "band": _band(conf),
                     "reason": reason, "tags": tags, "rejected": rejected, "split": split,
                     "corroborating": corroborating, "decomp_note": decomp_note}
@@ -238,6 +262,8 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
                  if n_corr else "; no direction-consistent signals in the library") + ".")
     if act_note:
         reason += " " + act_note
+    if deploy_note:
+        reason += " " + deploy_note
     return {"verdict": "UNEXPLAINED", "confidence": conf, "band": _band(conf),
             "reason": reason, "tags": tags, "rejected": rejected, "split": None,
             "corroborating": corroborating, "decomp_note": decomp_note}
@@ -290,6 +316,9 @@ def render_report(w: dict, ledger: dict, attr: dict, v: dict, ctx: dict, wid: st
         objs = ", ".join(a["objects_sample"][:2]) or "—"
         add(f"| {a['event_type']} ×{a['count']} ({objs}) | account activity [{a['bucket']}] | "
             f"{a['when']}, first {a['first_time'][:16]} | — | direct advertiser action | — |")
+    for d in ledger.get("deploys", []):
+        add(f"| {d['id']} ({d['n_commits']} commits) | site deploy [{d['layer_candidate']}] | "
+            f"{d['timing']} {d['date']} | — | earliest-possible-live, publish unconfirmed | — |")
     if not ledger["activity"] and not ledger["activity_log_available"]:
         add("| _activity log_ | account activity | — | — | UNAVAILABLE for this window | — |")
     add("")

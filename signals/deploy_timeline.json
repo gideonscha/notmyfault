@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "source": "Lovable edit history, sbcheckout project, pulled 2026-07-02 via Lovable API",
+    "caveat": "Timestamps are COMMIT times (UTC). Publish to production is a manual act by the advertiser and is NOT recorded here. publish_time_confirmed=false means treat commit time as earliest-possible-live.",
+    "evidence_type": "SITE_DEPLOY",
+    "landed": "2026-07-03, from two-part paste (session claude/phase-0-cloud-setup-7ia7ig)"
+  },
+  "deploy_events": [
+    {
+      "id": "deploy-2026-05-24-tracking",
+      "date": "2026-05-24",
+      "layer_candidate": "INTERNAL_FUNNEL",
+      "commits": [
+        {"time_utc": "07:16", "message": "Fixed tier override sync logic"},
+        {"time_utc": "07:38", "message": "Added captureTrackingParams call"},
+        {"time_utc": "08:10", "message": "Updated SiteMenu routes"},
+        {"time_utc": "10:20", "message": "Added Magic Mug promo logic"},
+        {"time_utc": "10:53", "message": "Updated Footer links"}
+      ],
+      "publish_time_confirmed": false,
+      "relevance": "captureTrackingParams lands on the exact day of the x6.5 checkout_rate step. Hypothesis: attribution-scope widening (tracking params passed through funnel -> Meta attributes more checkout events to ads), not a behavior change. Refines the May 24 ground-truth label to INTERNAL_FUNNEL (tracking/attribution-scope). Implication: pre-May-24 checkout_rate under-attributed; post-May-24 closer to true, ~4wk baseline.",
+      "verification": {
+        "check": "mirrored-step (notes_for_engine): if attribution-scope not behavior, purchases/CVR must NOT step on May 24 while checkout counts do, and purchases-per-checkout must show a mirrored down-step",
+        "run": "2026-07-03 against data/meta/account_daily.csv, 4wk medians pre (2026-04-26..05-23) vs post (2026-05-24..06-20)",
+        "result": "CONFIRMED",
+        "numbers": {
+          "checkout_rate_step": "0.0525 -> 0.3509 (x6.69 up)",
+          "purchases_per_checkout_step": "0.4376 -> 0.0772 (x0.18 down; predicted mirror ~x0.15)",
+          "cvr_link_to_purchase": "0.0214 -> 0.0282 (x1.32 — no down-step; drifts with declining spend/clicks)",
+          "purchases_at_boundary": "May 23: 18, May 24: 17, May 25: 25 — no step",
+          "checkouts_at_boundary": "May 23: 47, May 24: 287 — the step is entirely in checkout counting"
+        },
+        "conclusion": "The x6.5 step is a measurement/attribution-scope change, not a behavior change. Consistent with captureTrackingParams widening which checkout events Meta can attribute to ads."
+      }
+    },
+    {
+      "id": "deploy-2026-06-25-startpage",
+      "date": "2026-06-25",
+      "layer_candidate": "INTERNAL_FUNNEL",
+      "commits": [
+        {"time_utc": "12:22", "message": "Redesigned What's possible"},
+        {"time_utc": "12:55", "message": "Reduced theme font weights"},
+        {"time_utc": "13:09", "message": "Fixed Start theme chips layout"},
+        {"time_utc": "13:51", "message": "Lovable update"},
+        {"time_utc": "14:01", "message": "Added UGC carousel to /start"},
+        {"time_utc": "17:29", "message": "Added MugBanner to Memorial"},
+        {"time_utc": "17:32-17:34", "message": "Memorial banner padding x3"}
+      ],
+      "publish_time_confirmed": false,
+      "relevance": "Four-commit burst on /start (the checkout-entry origination surface) hours before/at the live case's onset. Primary INTERNAL_FUNNEL suspects for the Jun 25+ window, competing against EXTERNAL_DEMAND (World Cup peak week, USMNT prime-time loss Jun 25, post-Father's-Day gifting trough). RESERVED: feeds the Phase 4 blind backtest of jun25-checkout-entry-drop; not consumed by Phase 3 verdicts."
+    },
+    {
+      "id": "reactive-2026-06-29-hires-flag",
+      "date": "2026-06-29",
+      "layer_candidate": "REACTIVE_ACTION",
+      "commits": [
+        {"time_utc": "11:45", "message": "Disabled Hi-Res add-on flag"}
+      ],
+      "publish_time_confirmed": false,
+      "relevance": "Post-onset advertiser response to the live anomaly (Hi-Res pricing test halted). Corroborates anomaly was real and noticed; NOT a cause candidate. Hi-Res had ~80% attach rate incl. abandoned checkouts — its removal may shift checkout composition from Jun 29 onward; split the live window Jun 25-28 (pre) vs Jun 29+ (post) if the anomaly persists."
+    }
+  ],
+  "notes_for_engine": [
+    "SITE_DEPLOY is an evidence stream in engine/correlate.py: deploys join the ledger as INTERNAL_FUNNEL candidates with earliest-possible-live semantics (a deploy dated D can only explain anomalies with onset >= D; publish may be later than commit).",
+    "REACTIVE_ACTION tag implemented in engine/verdict.py; layer_candidate REACTIVE_ACTION deploys corroborate that an anomaly was real, never cause it.",
+    "May 24 mirrored-step verification: RUN 2026-07-03, CONFIRMED — see deploy-2026-05-24-tracking.verification."
+  ]
+}

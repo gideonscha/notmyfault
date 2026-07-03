@@ -75,10 +75,12 @@ def load_context() -> dict:
     flags = rl.expand_all(metrics["date"].min(), data_end, lib)
     act_path = DATA_META / "activity_log.csv"
     activity = pd.read_csv(act_path, parse_dates=["event_time"]) if act_path.exists() else pd.DataFrame()
+    dep_path = REPO_ROOT / "signals" / "deploy_timeline.json"
+    deploys = json.loads(dep_path.read_text())["deploy_events"] if dep_path.exists() else []
     return {
         "metrics": metrics, "baselines": baselines, "library": lib,
-        "flags": flags, "activity": activity, "data_end": data_end,
-        "windows": bl.anomaly_windows(baselines),
+        "flags": flags, "activity": activity, "deploys": deploys,
+        "data_end": data_end, "windows": bl.anomaly_windows(baselines),
     }
 
 
@@ -175,7 +177,25 @@ def ledger_for(w: dict, ctx: dict) -> dict:
                 "first_time": grp["event_time"].min().isoformat(),
                 "objects_sample": objs,
             })
+    # SITE_DEPLOY stream — earliest-possible-live semantics: commit time is a
+    # LOWER bound on live time, so a deploy dated D is an onset candidate only
+    # for windows with start >= D (within the lookback); a deploy after onset
+    # is tail-shaping or reactive, never an onset cause.
+    deploys = []
+    for dep in ctx["deploys"]:
+        d = dt.date.fromisoformat(dep["date"])
+        if d < w["start"] - dt.timedelta(days=LOOKBACK_HOURS // 24) or d > w["end"]:
+            continue
+        deploys.append({
+            "id": dep["id"], "date": d,
+            "layer_candidate": dep["layer_candidate"],
+            "n_commits": len(dep["commits"]),
+            "publish_time_confirmed": dep["publish_time_confirmed"],
+            "timing": ("pre-onset" if d < w["start"] else
+                       "onset-day" if d == w["start"] else "post-onset"),
+        })
     return {"events": events, "rules": rules, "activity": activity,
+            "deploys": deploys, "deploy_stream_available": bool(ctx["deploys"]),
             "activity_log_available": not act.empty}
 
 
