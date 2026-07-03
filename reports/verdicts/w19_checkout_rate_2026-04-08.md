@@ -38,6 +38,7 @@ coefficient-backed evidence explains only 0% of the drift; no direction-consiste
 ## What it is NOT
 
 - **NOT REPORTING_ARTIFACT**: no measurement-shift event on this metric; window is 84d before data end, outside the 3d attribution-lag zone
+- **NOT INTERNAL_FUNNEL**: no site deploys recorded in-window or in the preceding 72h — CAVEAT: the deploy timeline is a curated extract, not exhaustive; weak rejection
 - **NOT EXTERNAL_DEMAND**: ext-cpi-2026-04-10 overlaps but its direction (suppressive) is inconsistent with the observed drift
 
 ## Caveats

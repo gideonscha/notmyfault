@@ -1,5 +1,5 @@
 {
-  "_comment": "Labeled ground truth (brief §8). The engine is run BLIND across full history; these labels are only compared against its output afterwards. Split 2026-07-02: account data begins 2025-11-20, so pre-history incidents cannot be backtested against pulled data and live in untestable_pre_history.",
+  "_comment": "Labeled ground truth (brief \u00a78). The engine is run BLIND across full history; these labels are only compared against its output afterwards. Split 2026-07-02: account data begins 2025-11-20, so pre-history incidents cannot be backtested against pulled data and live in untestable_pre_history.",
   "testable": [
     {
       "id": "mar13-post-pause-learning-reset",
@@ -17,7 +17,7 @@
       "window_end": null,
       "window_note": "persistent level shift, not a bounded incident; still active at data end",
       "ground_truth": "INTERNAL_FUNNEL",
-      "notes": "checkouts_initiated/inline_link_clicks steps 0.081 -> 0.400 in one day and persists (acct-checkout-event-shift-2026-05-24). Site/tracking-layer definition change. Purchases unaffected — a REPORTING-flavored funnel-instrumentation change the engine must distinguish from a real funnel break."
+      "notes": "checkouts_initiated/inline_link_clicks steps 0.081 -> 0.400 in one day and persists (acct-checkout-event-shift-2026-05-24). Site/tracking-layer definition change. Purchases unaffected \u2014 a REPORTING-flavored funnel-instrumentation change the engine must distinguish from a real funnel break. REFINED 2026-07-03: deploy timeline (deploy-2026-05-24-tracking) shows 'Added captureTrackingParams' committed 07:38 UTC that day; mirrored-step verification CONFIRMED against account data \u2014 purchases-per-checkout stepped x0.18 down (predicted mirror ~x0.15) while purchases and link-CVR did not step at the boundary. Attribution-scope widening, not behavior change. See signals/deploy_timeline.json."
     },
     {
       "id": "jun25-checkout-entry-drop",
@@ -26,7 +26,7 @@
       "window_end": null,
       "window_note": "ongoing as of kickoff; measured against POST-May-24-shift checkout levels",
       "ground_truth": "UNRESOLVED",
-      "notes": "publish suspected, causation unproven — the live case the engine must adjudicate; headline deliverable of Phase 4. Phase 1 blind detection flagged CPA +59.1% on 2026-06-26..28 (CVR 53% / CTR 26% / CPM 21% of drift)."
+      "notes": "publish suspected, causation unproven \u2014 the live case the engine must adjudicate; headline deliverable of Phase 4. Phase 1 blind detection flagged CPA +59.1% on 2026-06-26..28 (CVR 53% / CTR 26% / CPM 21% of drift)."
     }
   ],
   "untestable_pre_history": {
@@ -39,7 +39,7 @@
         "window_end": "2025-05-15",
         "window_note": "pre-May 15, 2025 fix; predates account history",
         "ground_truth": "INTERNAL_FUNNEL",
-        "notes": "attribution/tracking break — fbclid lost on landing"
+        "notes": "attribution/tracking break \u2014 fbclid lost on landing"
       },
       {
         "id": "spend-doubling-auction-inflation",
