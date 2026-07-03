@@ -22,10 +22,13 @@ REPORT = REPO_ROOT / "reports" / "signal_coverage.md"
 ADJACENT_DAYS = 2
 
 
-def _event_span(sig: dict, data_end: dt.date) -> tuple[dt.date, dt.date]:
+def _event_spans(sig: dict, data_end: dt.date) -> list[tuple[dt.date, dt.date]]:
+    """One (start, end) span per event — or one per date for multi-date events."""
+    if "dates" in sig:
+        return [(d, d) for d in map(dt.date.fromisoformat, sig["dates"])]
     start = dt.date.fromisoformat(sig["date_start"])
     end = dt.date.fromisoformat(sig["date_end"]) if sig.get("date_end") else data_end
-    return start, end
+    return [(start, end)]
 
 
 def main() -> None:
@@ -59,12 +62,13 @@ def main() -> None:
     for i, w in enumerate(windows, 1):
         overlap, adjacent = [], []
         for sig in lib["signals"]:
-            s, e = _event_span(sig, data_end)
-            if s <= w["end"] and e >= w["start"]:
-                overlap.append(sig["id"] + ("" if sig["verified"] else " (UNVERIFIED)"))
-            elif (abs((s - w["end"]).days) <= ADJACENT_DAYS
-                  or abs((w["start"] - e).days) <= ADJACENT_DAYS):
-                adjacent.append(sig["id"] + ("" if sig["verified"] else " (UNVERIFIED)"))
+            spans = _event_spans(sig, data_end)
+            tag = sig["id"] + ("" if sig["verified"] else " (UNVERIFIED)")
+            if any(s <= w["end"] and e >= w["start"] for s, e in spans):
+                overlap.append(tag)
+            elif any(abs((s - w["end"]).days) <= ADJACENT_DAYS
+                     or abs((w["start"] - e).days) <= ADJACENT_DAYS for s, e in spans):
+                adjacent.append(tag)
         in_win = flags[(flags["date"] >= w["start"]) & (flags["date"] <= w["end"])]
         rule_bits = []
         for rid in sorted(in_win["rule_id"].unique()):

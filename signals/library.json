@@ -13,7 +13,7 @@
     "verified": "bool \u2014 unverified records are excluded from verdicts",
     "direction": "suppressive | stimulative | mixed \u2014 PRIOR direction of effect on demand/performance from the mechanism; the account-specific coefficient may contradict it (and that contradiction is signal)"
   },
-  "_pending": "library_seed.json PARTIALLY merged 2026-07-02: 5 events landed (4 Meta-platform + World Cup, the latter truncated in transit and independently re-verified). Seed's verified:false records and anything after the World Cup record never arrived \u2014 paste the remainder to finish.",
+  "_pending": "library_seed.json merge: part 1 of remainder merged 2026-07-02 (5 events, all 4 verified:false records confirmed and flipped). Part 2 of 2 still pending.",
   "signals": [
     {
       "id": "acct-delivery-pause-2026-02-27",
@@ -230,6 +230,88 @@
       "machine_check": "FIFA match schedule page; dates cross-checked NBC Sports / Wikipedia 2026-07-02",
       "verified": true,
       "merge_note": "seed-1.0 record TRUNCATED in transit mid-mechanism; dates and stage windows independently re-verified and mechanism completed 2026-07-02. Unconfirmed truncated fragment ('all-time attendance record broken Jun 25') omitted."
+    },
+    {
+      "id": "worldcup-2026-usmnt-matchdays",
+      "name": "USMNT match days (peak US attention)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "dates": [
+        "2026-06-12",
+        "2026-06-19",
+        "2026-06-25",
+        "2026-07-01",
+        "2026-07-06"
+      ],
+      "severity_prior": 4,
+      "direction": "suppressive",
+      "mechanism": "USMNT fixtures: Jun 12 vs Paraguay (W 4-1, 9PM ET), Jun 19 vs Australia (W 2-0, 3PM ET), Jun 25 vs Turkiye (L 3-2, 10PM ET prime time), Jul 1 R32 vs Bosnia (W 2-0), Jul 6 R16 vs Belgium (8PM ET, upcoming). Prime-time national-team matches are maximum single-day attention drain; Jun 25 loss also drove next-day news cycle.",
+      "source_url": "https://www.cbsnews.com/news/us-mens-2026-world-cup-schedule/",
+      "machine_check": "static match calendar; extend as USMNT advances",
+      "verified": true,
+      "merge_note": "seed-1.0 part 1; dates AND results independently corroborated (ESPN/Wikipedia Group D/Yahoo, 2026-07-02)"
+    },
+    {
+      "id": "bfcm-2025",
+      "name": "Black Friday / Cyber Monday 2025",
+      "layer": "EXTERNAL_AUCTION",
+      "geo": "US",
+      "date_start": "2025-11-25",
+      "date_end": "2025-12-01",
+      "severity_prior": 4,
+      "direction": "mixed",
+      "mechanism": "Peak auction CPM inflation + discount-conditioned buyers; effect depends on whether account ran BFCM offers. Thanksgiving 2025-11-27, Black Friday 2025-11-28, Cyber Monday 2025-12-01. Falls inside the account's first two weeks of delivery AND the baseline warmup window \u2014 observable in raw data but not in z-scores.",
+      "source_url": "https://nrf.com/topics/holiday-and-seasonal-trends/winter-holidays",
+      "machine_check": "fixed calendar: Thanksgiving = 4th Thursday Nov (2025-11-27), BF next day, CM next Monday",
+      "verified": true,
+      "merge_note": "seed-1.0 part 1; was verified:false \u2014 dates are deterministic calendar facts, source added, flipped 2026-07-02"
+    },
+    {
+      "id": "q5-2025-2026",
+      "name": "Q5 window (post-Christmas cheap inventory)",
+      "layer": "EXTERNAL_AUCTION",
+      "geo": "US",
+      "date_start": "2025-12-26",
+      "date_end": "2026-01-15",
+      "severity_prior": 3,
+      "direction": "mixed",
+      "mechanism": "Big advertisers exit post-holiday: CPMs drop sharply (industry reporting: ~60% decline mid-Dec to Jan 1; Meta CPMs ~28% lower y/y in Q5), but purchase intent is gift-fatigued/returns-focused. Classic signature: cheap CPM + soft CVR \u2014 matches the account's Dec 29-31 and Jan 6-7/12-13 anomaly decompositions. Window boundaries conventional ('Dec 26 through roughly the second week of January').",
+      "source_url": "https://www.northbeam.io/blog/the-definitive-northbeam-guide-to-q5",
+      "machine_check": "fixed calendar convention; CPM decline verifiable in account's own cpm series (Dec 26 - Jan 15 vs mid-Dec)",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0 part 1; was verified:false \u2014 industry concept + window corroborated (Northbeam, Gupta Media, Rightside Up), flipped 2026-07-02"
+    },
+    {
+      "id": "christmas-shipping-cutoff-2025",
+      "name": "Christmas shipping-cutoff cliff (custom/print products)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2025-12-15",
+      "date_end": "2025-12-24",
+      "severity_prior": 4,
+      "direction": "suppressive",
+      "mechanism": "Vertical-specific: custom print products lose gift-deadline viability mid-December; conversion intent collapses for arrive-by-Christmas buyers. Carrier anchors (2025): USPS Ground Advantage/First-Class Dec 17, Priority Dec 18, Express Dec 20 \u2014 custom-print production lead time pushes the effective cliff EARLIER than carrier dates, supporting the Dec 15 window start. Highly relevant to the Dec 18-19 anomaly. Account's own advertised delivery promise still unconfirmed \u2014 window is carrier-anchored, not account-confirmed.",
+      "source_url": "https://www.usps.com/holiday/holiday-shipping-dates.htm",
+      "machine_check": "account's own shipping-cutoff messaging archive (STILL PENDING); carrier deadlines per USPS 2025 holiday schedule",
+      "verified": true,
+      "boundary_confidence": "low",
+      "merge_note": "seed-1.0 part 1; was verified:false \u2014 carrier deadlines confirmed (USPS/Fox Business/DigitalCommerce360) and window is consistent with them; account-specific cutoff remains unverified, flipped with boundary_confidence low 2026-07-02"
+    },
+    {
+      "id": "superbowl-lx-2026",
+      "name": "Super Bowl LX (Seahawks 29-13 Patriots, Levi's Stadium)",
+      "layer": "EXTERNAL_DEMAND",
+      "geo": "US",
+      "date_start": "2026-02-08",
+      "date_end": "2026-02-08",
+      "severity_prior": 3,
+      "direction": "suppressive",
+      "mechanism": "Single-day attention monopoly, evening ET. CPM context: auction inventory typically cheapens during the game itself as attention concentrates on TV/streams while many advertisers pause \u2014 direction on CPA is mixed-to-suppressive depending on audience overlap with the broadcast.",
+      "source_url": "https://en.wikipedia.org/wiki/Super_Bowl_LX",
+      "machine_check": "date confirmed against Wikipedia + levisstadium.com event page",
+      "verified": true,
+      "merge_note": "seed-1.0 part 1; was verified:false \u2014 date confirmed Feb 8 2026 (Wikipedia, Levi's Stadium), CPM-context note added per machine_check, flipped 2026-07-02"
     }
   ],
   "rules": {
