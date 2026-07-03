@@ -61,5 +61,9 @@ reports/    generated verdict reports
   `engine/rules.py`; coverage join in `reports/signal_coverage.md`; backtest split
   into testable/untestable). Seed fully merged 2026-07-02: 24 dated signals, all
   seven verified:false records confirmed and flipped (none excluded).
-- [ ] Phase 3 — correlator + verdict engine
+- [x] Phase 3 — correlator + verdict engine (`engine/correlate.py` evidence ledger +
+  day-weighted attribution; `engine/verdict.py` §4-class cascade with quantified MIXED
+  splits, UNEXPLAINED as first-class outcome, timing-disciplined INTERNAL_ADS from the
+  activity log, per-window reports in `reports/verdicts/` incl. "What it is NOT";
+  ground-truth incident windows reserved for Phase 4)
 - [ ] Phase 4 — blind backtest (headline: Jun 25, 2026 verdict)
