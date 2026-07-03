@@ -66,4 +66,8 @@ reports/    generated verdict reports
   splits, UNEXPLAINED as first-class outcome, timing-disciplined INTERNAL_ADS from the
   activity log, per-window reports in `reports/verdicts/` incl. "What it is NOT";
   ground-truth incident windows reserved for Phase 4)
-- [ ] Phase 4 — blind backtest (headline: Jun 25, 2026 verdict)
+- [x] Phase 4 — blind backtest (`backtest/run_backtest.py` → `reports/backtest/`):
+  mar13 → INTERNAL_ADS 0.80 **AGREE**, may24 → INTERNAL_FUNNEL 0.92 **AGREE**,
+  Jun 25 live → **MIXED 59/41/0** (test-campaign internal [ADS∥FUNNEL, inseparable
+  at daily grain] / account-wide residual / zero attribution lag) + calibration
+  note + plain-English summary

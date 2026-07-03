@@ -79,7 +79,11 @@ def main() -> None:
         rows[f"{m}_curr"] = merged[f"{m}_curr"]
         rows[f"{m}_delta"] = merged[f"{m}_curr"] - merged[f"{m}_prev"]
     deltas_path = OBS_DIR / "deltas.csv"
-    rows.to_csv(deltas_path, mode="a", header=not deltas_path.exists(), index=False)
+    rows["date_start"] = rows["date_start"].astype(str)
+    if deltas_path.exists():  # multiple runs per day must not duplicate pairs
+        rows = pd.concat([pd.read_csv(deltas_path, dtype={"date_start": str}), rows])
+        rows = rows.drop_duplicates(subset=["date_start", "prev_asof", "curr_asof"], keep="last")
+    rows.to_csv(deltas_path, index=False)
     moved = rows[(rows[[f"{m}_delta" for m in DELTA_METRICS]].fillna(0) != 0).any(axis=1)]
     print(f"[snapshot_backfill] vs {prev_asof}: {len(rows)} overlapping days, "
           f"{len(moved)} restated -> appended to {deltas_path.relative_to(DATA_META)}")

@@ -59,6 +59,7 @@ LAG_ZONE_DAYS = 3
 MIXED_MIN_SHARE = 0.25
 UNEXPLAINED_BELOW = 0.40
 DOMINANT_SHARE = 0.50
+ADJACENT_DAYS_RESUME = 3
 
 LAYER_CLASS = {"EXTERNAL_DEMAND": "EXTERNAL_DEMAND",
                "EXTERNAL_AUCTION": "EXTERNAL_AUCTION",
@@ -78,11 +79,28 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
     tags: list[str] = []
     lib_rules = ctx["library"]["rules"]
 
+    # ---- SITE_DEPLOY stream (computed first: R0 may cite a deploy cause) ----
+    deploy_note = None
+    funnel_deploys = [d for d in ledger.get("deploys", [])
+                      if d["layer_candidate"] == "INTERNAL_FUNNEL" and d["timing"] != "post-onset"]
+    reactive_deploys = [d for d in ledger.get("deploys", [])
+                        if d["layer_candidate"] == "REACTIVE_ACTION" or d["timing"] == "post-onset"]
+
     # ---- R0: REPORTING_ARTIFACT ----
     measurement_events = [e for e in ledger["events"]
                           if e["id"].startswith("acct-checkout-event-shift")
                           and w["metric"] == "checkout_rate" and e["relation"] == "overlap"]
     if measurement_events:
+        cause = next((d for d in funnel_deploys
+                      if d["timing"] in ("onset-day", "pre-onset") and d.get("verified_mechanism")), None)
+        if cause:
+            return {"verdict": "INTERNAL_FUNNEL", "confidence": 0.92, "band": _band(0.92),
+                    "reason": f"{measurement_events[0]['id']}: metric definition shifted, and the cause is "
+                              f"evidenced — {cause['id']} (site-side tracking change, mechanism VERIFIED by "
+                              "the mirrored-step check: the level change is attribution-scope, not behavior). "
+                              "Instrumentation subtype: manifests as a reporting artifact; the causal layer "
+                              "is the advertiser's site.",
+                    "tags": tags + ["INSTRUMENTATION"], "rejected": rejected, "split": None}
         return {"verdict": "REPORTING_ARTIFACT", "confidence": 0.9, "band": _band(0.9),
                 "reason": f"{measurement_events[0]['id']}: metric is measured across a known "
                           "event-definition shift — level change, not behavior change.",
@@ -97,6 +115,21 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
                      "no measurement-shift event on this metric; window is "
                      f"{(ctx['data_end'] - w['end']).days}d before data end, outside the "
                      f"{LAG_ZONE_DAYS}d attribution-lag zone"))
+
+    # ---- R1b: pause-resume learning reset -> INTERNAL_ADS ----
+    # Resuming delivery after a multi-day pause is an advertiser action that
+    # re-enters ad sets into learning; a bad-direction window starting within
+    # RESUME_DAYS of the pause end is attributed to the reset.
+    pause_adjacent = [e for e in ledger["events"]
+                      if e["id"].startswith("acct-delivery-pause")
+                      and e["relation"] in ("adjacent-before", "overlap")]
+    if pause_adjacent and drift_is_bad:
+        return {"verdict": "INTERNAL_ADS", "confidence": 0.8, "band": _band(0.8),
+                "reason": f"{pause_adjacent[0]['id']}: window begins within {ADJACENT_DAYS_RESUME}d of a "
+                          "multi-day delivery pause ending — resume re-enters ad sets into learning "
+                          "(advertiser action). Consistent with the CVR-dominated pattern of a learning "
+                          "reset; the resume action itself appears in the activity log.",
+                "tags": tags + ["LEARNING_RESET"], "rejected": rejected, "split": None}
 
     # ---- R1: INTERNAL_ADS (timing-disciplined) ----
     # Activity timestamps are UTC; insight days are account-local. An event
@@ -137,13 +170,6 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
     else:
         rejected.append(("INTERNAL_ADS", "no budget/status/bid/targeting/structure changes in-window or "
                                          f"in the preceding {co.LOOKBACK_HOURS}h"))
-
-    # ---- SITE_DEPLOY stream (INTERNAL_FUNNEL candidates) ----
-    deploy_note = None
-    funnel_deploys = [d for d in ledger.get("deploys", [])
-                      if d["layer_candidate"] == "INTERNAL_FUNNEL" and d["timing"] != "post-onset"]
-    reactive_deploys = [d for d in ledger.get("deploys", [])
-                        if d["layer_candidate"] == "REACTIVE_ACTION" or d["timing"] == "post-onset"]
     if funnel_deploys:
         ids = ", ".join(d["id"] for d in funnel_deploys)
         deploy_note = (f"SITE_DEPLOY: {ids} ({funnel_deploys[0]['timing']}, publish time unconfirmed — "
