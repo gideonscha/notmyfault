@@ -74,6 +74,7 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
     bad_high = co.BAD_IS_HIGH[w["metric"]]
     drift_is_bad = bad_high is not None and (sign > 0) == bad_high
     rejected: list[tuple[str, str]] = []
+    tags: list[str] = []
     lib_rules = ctx["library"]["rules"]
 
     # ---- R0: REPORTING_ARTIFACT ----
@@ -84,13 +85,13 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
         return {"verdict": "REPORTING_ARTIFACT", "confidence": 0.9, "band": _band(0.9),
                 "reason": f"{measurement_events[0]['id']}: metric is measured across a known "
                           "event-definition shift — level change, not behavior change.",
-                "rejected": rejected, "split": None}
+                "tags": tags, "rejected": rejected, "split": None}
     in_lag_zone = (ctx["data_end"] - w["end"]).days <= LAG_ZONE_DAYS
     if in_lag_zone and w["metric"] in ("cpa", "cvr", "checkout_rate") and drift_is_bad:
         return {"verdict": "REPORTING_ARTIFACT", "confidence": 0.5, "band": _band(0.5),
                 "reason": "window ends inside the trailing attribution-lag zone; conversions "
                           "may back-fill — re-verdict after the lag curve settles.",
-                "rejected": rejected, "split": None}
+                "tags": tags, "rejected": rejected, "split": None}
     rejected.append(("REPORTING_ARTIFACT",
                      "no measurement-shift event on this metric; window is "
                      f"{(ctx['data_end'] - w['end']).days}d before data end, outside the "
@@ -119,13 +120,16 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
             if delta <= 0:
                 act_note = (f"Advertiser actions ({buckets}) in the {co.LOOKBACK_HOURS}h before/at onset — "
                             "INTERNAL_ADS candidate, unquantified (v1 has no effect model for non-spend metrics).")
-            elif delta == 1:
-                act_note = (f"Advertiser actions ({buckets}) first recorded onset+1 (UTC; possibly onset "
-                            "evening account-local) — ambiguous INTERNAL_ADS candidate, unquantified.")
             else:
+                tags.append("REACTIVE_ACTION")
+                skew = (" (dated onset+1 UTC — even allowing timezone skew, the anomaly's first "
+                        "full day precedes the actions)" if delta == 1 else "")
+                act_note = (f"Advertiser actions ({buckets}) began {delta}d after onset{skew} — tagged "
+                            "REACTIVE_ACTION: the advertiser responding to the anomaly, not causing it. "
+                            "May shape the window's tail; cannot explain onset.")
                 rejected.append(("INTERNAL_ADS (as onset cause)",
-                                 f"meaningful account changes ({buckets}) begin {delta}d after onset — "
-                                 "timing indicates reaction to the anomaly, not cause; may affect the window tail"))
+                                 f"meaningful account changes ({buckets}) begin after onset — "
+                                 "REACTIVE_ACTION, response rather than cause"))
     elif not ledger["activity_log_available"]:
         rejected.append(("INTERNAL_ADS", "UNTESTABLE — activity log unavailable for this window "
                                          "(endpoint retention); absence of evidence, not evidence of absence"))
@@ -198,7 +202,7 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
             cls = "MIXED"
             reason += f" MIXED with {other}: coefficient-backed rules explain {odl/abs(D):.0%} of drift."
         return {"verdict": cls, "confidence": conf, "band": _band(conf),
-                "reason": reason, "rejected": rejected, "split": split,
+                "reason": reason, "tags": tags, "rejected": rejected, "split": split,
                 "internal_ads_events": internal_ads["events"]}
 
     if candidates and abs(D) > 0:
@@ -222,7 +226,7 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
             if act_note:
                 reason += " " + act_note
             return {"verdict": cls, "confidence": conf, "band": _band(conf),
-                    "reason": reason, "rejected": rejected, "split": split,
+                    "reason": reason, "tags": tags, "rejected": rejected, "split": split,
                     "corroborating": corroborating, "decomp_note": decomp_note}
 
     # ---- R4: UNEXPLAINED ----
@@ -235,7 +239,7 @@ def classify(w: dict, ledger: dict, attr: dict, ctx: dict) -> dict:
     if act_note:
         reason += " " + act_note
     return {"verdict": "UNEXPLAINED", "confidence": conf, "band": _band(conf),
-            "reason": reason, "rejected": rejected, "split": None,
+            "reason": reason, "tags": tags, "rejected": rejected, "split": None,
             "corroborating": corroborating, "decomp_note": decomp_note}
 
 
@@ -248,6 +252,9 @@ def render_report(w: dict, ledger: dict, attr: dict, v: dict, ctx: dict, wid: st
     add("")
     add(f"**VERDICT: {v['verdict']}** (confidence {v['confidence']:.2f} — {v['band']})")
     add("")
+    if v.get("tags"):
+        add("Tags: " + ", ".join(v["tags"]))
+        add("")
     add(v["reason"])
     if v.get("split"):
         add("")
