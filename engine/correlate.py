@@ -191,6 +191,7 @@ def ledger_for(w: dict, ctx: dict) -> dict:
             "layer_candidate": dep["layer_candidate"],
             "n_commits": len(dep["commits"]),
             "publish_time_confirmed": dep["publish_time_confirmed"],
+            "verified_mechanism": (dep.get("verification") or {}).get("result") == "CONFIRMED",
             "timing": ("pre-onset" if d < w["start"] else
                        "onset-day" if d == w["start"] else "post-onset"),
         })
